@@ -1,13 +1,12 @@
 from re import findall
-from time import sleep
+from time import sleep, strftime
 from requests import get
 from textwrap import wrap
 from dotenv import load_dotenv
 from os import remove, mkdir, getenv
 from os.path import join as join_path, dirname, abspath
 from shutil import make_archive, rmtree
-import string
-import random
+
 
 from redbox import EmailBox
 from redmail import EmailSender
@@ -57,14 +56,6 @@ def get_msgs():
     return msgs
 
 
-# ID Generator
-def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
-    txt = ''
-    while len(findall(r'\d', txt))==0:
-        txt = ''.join(random.choice(chars) for _ in range(size))
-    return txt
-
-
 # Start the bot
 if __name__ == '__main__':
     print('Ready to response...')
@@ -75,6 +66,7 @@ if __name__ == '__main__':
     while True: # Define a inifity loop to response email's
         try: # Define a try-except option for error's
             msgs = get_msgs() # Get unread messages
+            counter = 1
             for msg in msgs:
                 sub = msg.subject.lower().split(' ') # Split subject to easy find command's
                 if sub[0] == 'help': # Define the help command
@@ -91,7 +83,7 @@ if __name__ == '__main__':
 
 
                 elif sub[0] == 'get' and msg.from_.split('<')[1][:-1] == OWNER: # Define get messages command (owner only)
-                    file_name = join_path(BASE_DIR, f'{sub[2]}_{id_generator()}.txt')
+                    file_name = join_path(BASE_DIR, f'{sub[2]}_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
                     with open(file_name, 'w') as _f:
                         for message in bot.iter_messages(sub[2], limit=int(sub[1])):
                             _f.write('\n'.join(wrap(message.message, 50)))
@@ -105,6 +97,7 @@ if __name__ == '__main__':
                         attachments=[file_name]
                     )
 
+                    counter += 1
                     remove(file_name) # Remove the file
                     print(f'{sub[1]} messages from @{sub[2]}', 'to', msg.from_)
 
@@ -112,7 +105,7 @@ if __name__ == '__main__':
                 elif sub[0] in ['mtproto', 'mtproxy']: # Define Mtproto proxy command
                     channels = ['hack_proxy', 'NetAccount']
 
-                    file_name = join_path(BASE_DIR, f'mtproto_{id_generator()}.txt')
+                    file_name = join_path(BASE_DIR, f'mtproto_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
                     with open(file_name, 'w') as _f:
                         # Write proxies to file
                         for channel in channels:
@@ -133,13 +126,14 @@ if __name__ == '__main__':
                         attachments=[file_name]
                     )
 
+                    counter += 1
                     remove(file_name) # Remove the file
                     print('sent mtproto to', msg.from_)
 
 
                 elif sub[0] == 'sstp': # Define SSTP server command
 
-                    file_name = join_path(BASE_DIR, f'sstp_{id_generator()}.txt')
+                    file_name = join_path(BASE_DIR, f'sstp_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
                     with open(file_name, 'w') as _f:
                         # Write servers to file
                         request = get('https://vpngate.net')
@@ -156,6 +150,7 @@ if __name__ == '__main__':
                         attachments=[file_name]
                     )
 
+                    counter += 1
                     remove(file_name) # Remove the file
                     print('sent sstp to', msg.from_)
 
@@ -163,7 +158,7 @@ if __name__ == '__main__':
                 elif sub[0] == 'config': # Define HTTP config command
                     channels = ['mypremium98', 'NetAccount', 'injector2', 'barcode_tm', 'Free_Nettm']
 
-                    config_name = f'config_{id_generator()}'
+                    config_name = f'config_{strftime("%H-%M_%d-%m-%y")}_{counter}'
                     mkdir(join_path(BASE_DIR, config_name))
 
                     # Write proxies to file
@@ -187,6 +182,7 @@ if __name__ == '__main__':
                         attachments=[f'{config_name}.zip']
                     )
 
+                    counter += 1
                     remove(join_path(BASE_DIR, f'{config_name}.zip'))
                     rmtree(join_path(BASE_DIR, config_name), ignore_errors=True) # Remove the folder
                     print('sent config to', msg.from_)
@@ -195,7 +191,7 @@ if __name__ == '__main__':
                 elif sub[0] in ['v2ray', 'vmess', 'vless', 'trojan']: # Define V2ray server command
                     channels = ['v2rayng_org', 'NetBox2', 'freelancer_gray']
 
-                    file_name = join_path(BASE_DIR, f'v2ray_{id_generator()}.txt')
+                    file_name = join_path(BASE_DIR, f'v2ray_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
                     with open(file_name, 'w') as _f:
                         # Write servers to file
                         for channel in channels:
@@ -217,6 +213,7 @@ if __name__ == '__main__':
                         attachments=[file_name]
                     )
 
+                    counter += 1
                     remove(file_name)
                     print('sent v2ray to', msg.from_)
 
