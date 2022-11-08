@@ -83,76 +83,107 @@ if __name__ == '__main__':
 
 
                 elif sub[0] == 'get' and msg.from_.split('<')[1][:-1] == OWNER: # Define get messages command (owner only)
-                    file_name = join_path(BASE_DIR, f'{sub[2]}_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
-                    with open(file_name, 'w') as _f:
-                        for message in bot.iter_messages(sub[2], limit=int(sub[1])):
-                            _f.write('\n'.join(wrap(message.message, 50)))
-                            _f.write('\n\n' + '-'*60 + '\n\n') # Write a line between messages
+                    
+                    text = ''
+                    for message in bot.iter_messages(sub[2], limit=int(sub[1])):
+                        wr = '\n'.join(wrap(message.message, 50))
+                        text += ('\n\n' + '-'*60 + '\n\n').join(wr)
 
-                    # send_mail the file of messages
-                    send_mail(
-                        f'{sub[1]} messages from @{sub[2]}',
-                        receivers=[msg.from_],
-                        text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the file of messages: ',
-                        attachments=[file_name]
-                    )
+                    if len(sub) == 2 and sub[1] == 'text':
+                        # send_mail the text of messages
+                        send_mail(
+                            f'{sub[1]} messages from @{sub[2]}',
+                            receivers=[msg.from_],
+                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the file of messages:\n\n' + text
+                        )
 
-                    counter += 1
-                    remove(file_name) # Remove the file
-                    print(f'{sub[1]} messages from @{sub[2]}', 'to', msg.from_)
+                    else:
+                        file_name = join_path(BASE_DIR, f'{sub[2]}_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
+                        open(file_name, 'w').write(text)
+
+                        # send_mail the file of messages
+                        send_mail(
+                            f'{sub[1]} messages from @{sub[2]}',
+                            receivers=[msg.from_],
+                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the file of messages: ',
+                            attachments=[file_name]
+                        )
+
+                        counter += 1
+                        remove(file_name) # Remove the file
+                    print(f'{sub[1]} Messages from @{sub[2]}', '~>', msg.from_)
 
 
                 elif sub[0] in ['mtproto', 'mtproxy']: # Define Mtproto proxy command
                     channels = ['hack_proxy', 'NetAccount']
 
-                    file_name = join_path(BASE_DIR, f'mtproto_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
-                    with open(file_name, 'w') as _f:
-                        # Write proxies to file
-                        for channel in channels:
-                            for message in bot.iter_messages(channel, limit=30):
-                                proxies = findall(
-                                    r'((https://t\.me/|tg://)proxy\?server=.+&port=[0-9]{0,5}&secret=[a-z0-9A-Z_]+)(\s|\n)?',
-                                    message.message
-                                )
+                    # Write proxies to file
+                    proxies = ''
+                    for channel in channels:
+                        for message in bot.iter_messages(channel, limit=30):
+                            result = findall(
+                                r'((https://t\.me/|tg://)proxy\?server=.+&port=[0-9]{0,5}&secret=[a-z0-9A-Z_]+)(\s|\n)?',
+                                message.message)
 
-                                for proxy in proxies:
-                                    _f.write(proxy[0])
-                                    _f.write('\n\n' + '-'*60 + '\n\n') # Write a line between messages
+                            result = [proxy[0] for proxy in result]
+                            proxies += ('\n\n'+'-'*60+'\n\n').join(result) + '\n\n'+'-'*60+'\n\n'
 
-                    # send_mail the file of proxies
-                    send_mail('Mtproto porxies',
-                        receivers=[msg.from_],
-                        text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the proxies: ',
-                        attachments=[file_name]
-                    )
+                    if len(sub) == 2 and sub[1] == 'text':
+                        # send_mail the text of proxies
+                        send_mail('MTProto Porxies',
+                            receivers=[msg.from_],
+                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the Proxies:\n\n' + proxies
+                        )
 
-                    counter += 1
-                    remove(file_name) # Remove the file
-                    print('sent mtproto to', msg.from_)
+                    else:
+                        file_name = join_path(BASE_DIR, f'mtproto_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
+                        open(file_name, 'w').write(proxies)
+
+                        # send_mail the file of proxies
+                        send_mail('MTProto Porxies',
+                            receivers=[msg.from_],
+                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the Proxies: ',
+                            attachments=[file_name]
+                        )
+
+                        counter += 1
+                        remove(file_name) # Remove the file
+
+
+                    print('Sent MTProto ~>', msg.from_)
 
 
                 elif sub[0] == 'sstp': # Define SSTP server command
 
-                    file_name = join_path(BASE_DIR, f'sstp_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
-                    with open(file_name, 'w') as _f:
-                        # Write servers to file
-                        request = get('https://vpngate.net')
-                        servers = findall(
-                            r'''SSTP Hostname :<br /><b><span style='color: #006600;' >(.*?)</span>''',
-                            request.text
-                        )
-                        _f.write('\n'.join(servers))
-
-                    # send_mail the file of servers
-                    send_mail('Open-SSTP servers',
-                        receivers=[msg.from_],
-                        text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the SSTP servers: ',
-                        attachments=[file_name]
+                    
+                    # Write servers to file
+                    request = get('https://vpngate.net')
+                    servers = findall(
+                        r'''SSTP Hostname :<br /><b><span style='color: #006600;' >(.*?)</span>''',
+                        request.text
                     )
 
-                    counter += 1
-                    remove(file_name) # Remove the file
-                    print('sent sstp to', msg.from_)
+                    if len(sub) == 2 and sub[1] == 'text':
+                        # send_mail the text of servers
+                        send_mail('Open-SSTP servers',
+                            receivers=[msg.from_],
+                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the SSTP servers:\n\n' + '\n'.join(servers)
+                        )
+
+                    else:
+                        file_name = join_path(BASE_DIR, f'sstp_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
+                        open(file_name, 'w').write('\n'.join(servers))
+
+                        # send_mail the file of servers
+                        send_mail('Open-SSTP servers',
+                            receivers=[msg.from_],
+                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the SSTP servers: ',
+                            attachments=[file_name]
+                        )
+
+                        counter += 1
+                        remove(file_name) # Remove the file
+                    print('Sent SSTP servers ~>', msg.from_)
 
 
                 elif sub[0] == 'config': # Define HTTP config command
@@ -185,37 +216,48 @@ if __name__ == '__main__':
                     counter += 1
                     remove(join_path(BASE_DIR, f'{config_name}.zip'))
                     rmtree(join_path(BASE_DIR, config_name), ignore_errors=True) # Remove the folder
-                    print('sent config to', msg.from_)
+                    print('Sent Configs ~>', msg.from_)
 
 
                 elif sub[0] in ['v2ray', 'vmess', 'vless', 'trojan']: # Define V2ray server command
                     channels = ['v2rayng_org', 'NetBox2', 'freelancer_gray']
 
-                    file_name = join_path(BASE_DIR, f'v2ray_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
-                    with open(file_name, 'w') as _f:
-                        # Write servers to file
-                        for channel in channels:
-                            for message in bot.iter_messages(channel, limit=30):
-                                servers = findall(
-                                    r"((vmess|trojan|vless|trojan-go)://[a-z0-9A-Z=\%\@\#\-\&\/\:\.\?]+)(\s|\n)?",
-                                    message.message
-                                )
+                    text = ''
+                    # Write servers to file
+                    for channel in channels:
+                        for message in bot.iter_messages(channel, limit=30):
+                            servers = findall(
+                                r"((vmess|trojan|vless|trojan-go)://[a-z0-9A-Z=\%\@\#\-\&\/\:\.\?]+)(\s|\n)?",
+                                message.message
+                            )
 
-                                for server in servers:
-                                    _f.write(server[0])
-                                    _f.write('\n\n' + '-'*60 + '\n\n') # Write a line between messages
+                            servers = [server[0] for server in servers]
+                            text += ('\n\n'+'-'*60+'\n\n').join(servers) + '\n\n'+'-'*60+'\n\n'
+                    
+                    if len(sub) == 2 and sub[1] == 'text':
+                        # send_mail the text of servers
+                        send_mail(
+                            'V2ray servers',
+                            receivers=[msg.from_],
+                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the V2ray servers:\n\n' + text
+                        )
+                    
 
-                    # send_mail the file of servers
-                    send_mail(
-                        'V2ray servers',
-                        receivers=[msg.from_],
-                        text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the V2ray servers: ',
-                        attachments=[file_name]
-                    )
+                    else:
+                        file_name = join_path(BASE_DIR, f'v2ray_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
+                        open(file_name, 'w').write(text)
 
-                    counter += 1
-                    remove(file_name)
-                    print('sent v2ray to', msg.from_)
+                        # send_mail the file of servers
+                        send_mail(
+                            'V2ray servers',
+                            receivers=[msg.from_],
+                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the V2ray servers: ',
+                            attachments=[file_name]
+                        )
+
+                        counter += 1
+                        remove(file_name)
+                    print('Sent V2Ray servers ~>', msg.from_)
 
 
                 elif sub[0] == 'apk': # Define APK link command
@@ -255,7 +297,7 @@ if __name__ == '__main__':
                             html=html
                         )
 
-                        print(f'sent {sub[1]} to', msg.from_)
+                        print(f'Sent {sub[1]} APK ~>', msg.from_)
 
 
         # Define the Keyboard Interrupt detector to stop the bot
