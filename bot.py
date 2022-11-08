@@ -1,5 +1,6 @@
 from re import findall
 from time import sleep
+from requests import get
 from textwrap import wrap
 from dotenv import load_dotenv
 from os import remove, mkdir, getenv
@@ -87,6 +88,8 @@ if __name__ == '__main__':
                             }
                         )
                     print('Help ~> ', msg.from_)
+
+
                 elif sub[0] == 'get' and msg.from_.split('<')[1][:-1] == OWNER: # Define get messages command (owner only)
                     file_name = join_path(BASE_DIR, f'{sub[2]}_{id_generator()}.txt')
                     with open(file_name, 'w') as _f:
@@ -104,6 +107,8 @@ if __name__ == '__main__':
 
                     remove(file_name) # Remove the file
                     print(f'{sub[1]} messages from @{sub[2]}', 'to', msg.from_)
+
+
                 elif sub[0] in ['mtproto', 'mtproxy']: # Define Mtproto proxy command
                     channels = ['hack_proxy', 'NetAccount']
 
@@ -130,6 +135,31 @@ if __name__ == '__main__':
 
                     remove(file_name) # Remove the file
                     print('sent mtproto to', msg.from_)
+
+
+                elif sub[0] == 'sstp': # Define SSTP server command
+
+                    file_name = join_path(BASE_DIR, f'sstp_{id_generator()}.txt')
+                    with open(file_name, 'w') as _f:
+                        # Write servers to file
+                        request = get('https://vpngate.net')
+                        servers = findall(
+                            r'''SSTP Hostname :<br /><b><span style='color: #006600;' >(.*?)</span>''',
+                            request.text
+                        )
+                        _f.write('\n'.join(servers))
+
+                    # send_mail the file of servers
+                    send_mail('Open-SSTP servers',
+                        receivers=[msg.from_],
+                        text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the SSTP servers: ',
+                        attachments=[file_name]
+                    )
+
+                    remove(file_name) # Remove the file
+                    print('sent sstp to', msg.from_)
+
+
                 elif sub[0] == 'config': # Define HTTP config command
                     channels = ['mypremium98', 'NetAccount', 'injector2', 'barcode_tm', 'Free_Nettm']
 
@@ -160,6 +190,8 @@ if __name__ == '__main__':
                     remove(join_path(BASE_DIR, f'{config_name}.zip'))
                     rmtree(join_path(BASE_DIR, config_name), ignore_errors=True) # Remove the folder
                     print('sent config to', msg.from_)
+
+
                 elif sub[0] in ['v2ray', 'vmess', 'vless', 'trojan']: # Define V2ray server command
                     channels = ['v2rayng_org', 'NetBox2', 'freelancer_gray']
 
@@ -187,6 +219,8 @@ if __name__ == '__main__':
 
                     remove(file_name)
                     print('sent v2ray to', msg.from_)
+
+
                 elif sub[0] == 'apk': # Define APK link command
                     drive = {
                         'injector': 'https://drive.google.com/file/d/1Wc5ocL4feKtN1oIIenU6SGxlFdImDddS',
@@ -225,6 +259,8 @@ if __name__ == '__main__':
                         )
 
                         print(f'sent {sub[1]} to', msg.from_)
+
+
         # Define the Keyboard Interrupt detector to stop the bot
         except KeyboardInterrupt:
             print('\n\n|-----Bot stoped-----|')
