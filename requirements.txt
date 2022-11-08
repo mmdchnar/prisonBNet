@@ -3,3 +3,4 @@ redbox
 telethon
 cryptg
 python-dotenv
+requests
