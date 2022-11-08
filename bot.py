@@ -186,39 +186,6 @@ if __name__ == '__main__':
                     print('Sent SSTP servers ~>', msg.from_)
 
 
-                elif sub[0] == 'config': # Define HTTP config command
-                    channels = ['mypremium98', 'NetAccount', 'injector2', 'barcode_tm', 'Free_Nettm']
-
-                    config_name = f'config_{strftime("%H-%M_%d-%m-%y")}_{counter}'
-                    mkdir(join_path(BASE_DIR, config_name))
-
-                    # Write proxies to file
-                    for channel in channels:
-                        mkdir(join_path(config_name, channel)) # Make sub-folder
-                        for message in bot.iter_messages(channel, limit=20):
-                            if message.file is not None and message.file.name is not None:
-                                if message.file.name[-3:] in ['.hc', 'ehi']:
-                                    bot_sync(
-                                        message.download_media(
-                                            join_path(config_name, channel, message.file.name)
-                                        )
-                                    )
-                    make_archive(config_name, 'zip', join_path(BASE_DIR, config_name))
-
-                    # send_mail the file of configs
-                    send_mail(
-                        'HTTP Config',
-                        receivers=[msg.from_],
-                        text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the configs: ',
-                        attachments=[f'{config_name}.zip']
-                    )
-
-                    counter += 1
-                    remove(join_path(BASE_DIR, f'{config_name}.zip'))
-                    rmtree(join_path(BASE_DIR, config_name), ignore_errors=True) # Remove the folder
-                    print('Sent Configs ~>', msg.from_)
-
-
                 elif sub[0] in ['v2ray', 'vmess', 'vless', 'trojan']: # Define V2ray server command
                     channels = ['v2rayng_org', 'NetBox2', 'freelancer_gray']
 
@@ -258,6 +225,39 @@ if __name__ == '__main__':
                         counter += 1
                         remove(file_name)
                     print('Sent V2Ray servers ~>', msg.from_)
+
+
+                elif sub[0] == 'config': # Define HTTP config command
+                    channels = ['mypremium98', 'NetAccount', 'injector2', 'barcode_tm', 'Free_Nettm']
+
+                    config_name = f'config_{strftime("%H-%M_%d-%m-%y")}_{counter}'
+                    mkdir(join_path(BASE_DIR, config_name))
+
+                    # Write proxies to file
+                    for channel in channels:
+                        mkdir(join_path(config_name, channel)) # Make sub-folder
+                        for message in bot.iter_messages(channel, limit=20):
+                            if message.file is not None and message.file.name is not None:
+                                if message.file.name[-3:] in ['.hc', 'ehi']:
+                                    bot_sync(
+                                        message.download_media(
+                                            join_path(config_name, channel, message.file.name)
+                                        )
+                                    )
+                    make_archive(config_name, 'zip', join_path(BASE_DIR, config_name))
+
+                    # send_mail the file of configs
+                    send_mail(
+                        'HTTP Config',
+                        receivers=[msg.from_],
+                        text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the configs: ',
+                        attachments=[f'{config_name}.zip']
+                    )
+
+                    counter += 1
+                    remove(join_path(BASE_DIR, f'{config_name}.zip'))
+                    rmtree(join_path(BASE_DIR, config_name), ignore_errors=True) # Remove the folder
+                    print('Sent Configs ~>', msg.from_)
 
 
                 elif sub[0] == 'apk': # Define APK link command
