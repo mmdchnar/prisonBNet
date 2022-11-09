@@ -118,7 +118,7 @@ if __name__ == '__main__':
                         send_mail(
                             f'{sub[1]} messages from @{sub[2]}',
                             receivers=[msg.from_],
-                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the file of messages:\n\n' + text
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the file of messages:\n\n{text}'
                         )
 
                     else:
@@ -129,7 +129,7 @@ if __name__ == '__main__':
                         send_mail(
                             f'{sub[1]} messages from @{sub[2]}',
                             receivers=[msg.from_],
-                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the file of messages: ',
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the file of messages:',
                             attachments=[file_name]
                         )
 
@@ -157,7 +157,7 @@ if __name__ == '__main__':
                         # Send the text of proxies
                         send_mail('MTProto Porxies',
                             receivers=[msg.from_],
-                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the Proxies:\n\n' + proxies
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the Proxies:\n\n + {proxies}'
                         )
 
                     else:
@@ -167,7 +167,7 @@ if __name__ == '__main__':
                         # Send the file of proxies
                         send_mail('MTProto Porxies',
                             receivers=[msg.from_],
-                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the Proxies: ',
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the Proxies:',
                             attachments=[file_name]
                         )
 
@@ -192,7 +192,7 @@ if __name__ == '__main__':
                         # Send the text of servers
                         send_mail('Open-SSTP servers',
                             receivers=[msg.from_],
-                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the SSTP servers:\n\n' + '\n'.join(servers)
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the SSTP servers:\n\n{"\n".join(servers)}'
                         )
 
                     else:
@@ -202,7 +202,7 @@ if __name__ == '__main__':
                         # Send the file of servers
                         send_mail('Open-SSTP servers',
                             receivers=[msg.from_],
-                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the SSTP servers: ',
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the SSTP servers: ',
                             attachments=[file_name]
                         )
 
@@ -223,15 +223,16 @@ if __name__ == '__main__':
                                 message.message
                             )
 
-                            servers = [server[0] for server in servers]
-                            text += ('\n\n'+'-'*60+'\n\n').join(servers) + '\n\n'+'-'*60+'\n\n'
+                            if servers:
+                                servers = [server[0] for server in servers]
+                                text += ('\n\n'+'-'*60+'\n\n').join(servers) + '\n\n'+'-'*60+'\n\n'
                     
                     if len(sub) == 2 and sub[1] == 'text':
                         # Send the text of servers
                         send_mail(
                             'V2ray servers',
                             receivers=[msg.from_],
-                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the V2ray servers:\n\n' + text
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the V2ray servers:\n\n{text}'
                         )
                     
 
@@ -243,7 +244,7 @@ if __name__ == '__main__':
                         send_mail(
                             'V2ray servers',
                             receivers=[msg.from_],
-                            text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the V2ray servers: ',
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the V2ray servers:',
                             attachments=[file_name]
                         )
 
