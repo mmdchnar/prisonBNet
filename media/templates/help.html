@@ -21,8 +21,18 @@
 </head>
 <body style="font-family:Arial, Helvetica, sans-serif;">
 
-{% for char in email_address %}
-    <p>{{ char }}</p>
+{% for command in help %}
+    <br>
+    <li>
+        <a href="mailto:{{ email_address }}?subject={{ command[0] }}">
+            <b>
+                {{ command[0] }}
+            </b>
+        </a>
+    </li>
+    <ul>
+        {{ command[1] }}
+    </ul>
 {% endfor %}
 
 <br>

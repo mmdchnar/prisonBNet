@@ -99,6 +99,7 @@ if __name__ == '__main__':
                         html=html, 
                         body_params={
                             'email_address': EMAIL,
+                            'help': HELP,
                         }
                     )
 
