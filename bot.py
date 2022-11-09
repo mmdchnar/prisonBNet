@@ -211,7 +211,7 @@ if __name__ == '__main__':
 
 
                 elif sub[0] == 'argo': # Define ArgoVPN Bridges command
-                    channels = ['injector2']
+                    channels = ['injector2', 'ArgoVPN_ir', 'ArgoVpnY']
 
                     # Write bridges to file
                     bridges = ''
@@ -228,7 +228,7 @@ if __name__ == '__main__':
                         # Send the text of bridges
                         send_mail('ArgoVPN Bridges',
                             receivers=[msg.from_],
-                            text = f'Dear {msg.from_.split("<")[0]} Here is the Bridges:\n\n + {bridges}'
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the Bridges:\n\n{bridges}'
                         )
 
                     else:
