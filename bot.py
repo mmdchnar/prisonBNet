@@ -286,11 +286,11 @@ if __name__ == '__main__':
 
 
                 elif sub[0] == 'vpn': # Define VPN links command
-                    html = 'Dear <b>{msg.from_.split("<")[0]}</b>\nHere is the APK links:'
+                    html = f'Dear <b>{msg.from_.split("<")[0]}</b>\nHere is the APK links:<br><hr>'
 
                     for app in DRIVE:
-                        html += f'<br><a href="{DRIVE[app]}"><b>Download {app} from Google-Drive</b></a>\
-                            <br><a href="{BAYAN[app]}"><b>Download {app} from Bayan-Box</b></a><hr>'
+                        html += f'<br><a href="{DRIVE[app]}">Download <b>{app}</b> from Google-Drive</a>\
+                            <br><a href="{BAYAN[app]}">Download <b>{app}</b> from Bayan-Box</a><hr>'
 
 
                     # Send the VPN links
