@@ -346,10 +346,10 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             print('\n\n|-----Bot stoped-----|')
             break
-        # # Define an except to pass other error's to continue bot if get an error 
-        # except Exception as error:
-        #     print(error)
-        # except:
-        #     pass
+        # Define an except to pass other error's to continue bot if get an error 
+        except Exception as error:
+            print(error)
+        except:
+            pass
         
         sleep(10)
