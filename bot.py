@@ -192,8 +192,7 @@ if __name__ == '__main__':
                         # Send the text of servers
                         send_mail('Open-SSTP servers',
                             receivers=[msg.from_],
-                            text = f'Dear {msg.from_.split("<")[0]} Here is the SSTP servers:\n\n{"\n".join(servers)}'
-                        )
+                            text = f'''Dear {msg.from_.split('<')[0]} Here is the SSTP servers:\n\n{chr(10).join(servers)}''')
 
                     else:
                         file_name = join_path(BASE_DIR, f'sstp_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
@@ -209,6 +208,45 @@ if __name__ == '__main__':
                         counter += 1
                         remove(file_name) # Remove the file
                     print('Sent SSTP servers ~>', msg.from_)
+
+
+                elif sub[0] == 'argo': # Define ArgoVPN Bridges command
+                    channels = ['injector2']
+
+                    # Write bridges to file
+                    bridges = ''
+                    for channel in channels:
+                        for message in bot.iter_messages(channel, limit=50):
+                            result = findall(
+                                r'-----BEGIN ARGO VPN BRIDGE BLOCK-----.*?-----END ARGO VPN BRIDGE BLOCK-----',
+                                message.message)
+
+                            if result:
+                                bridges += ('\n\n'+'-'*60+'\n\n').join(result) + '\n\n'+'-'*60+'\n\n'
+
+                    if len(sub) == 2 and sub[1] == 'text':
+                        # Send the text of bridges
+                        send_mail('ArgoVPN Bridges',
+                            receivers=[msg.from_],
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the Bridges:\n\n + {bridges}'
+                        )
+
+                    else:
+                        file_name = join_path(BASE_DIR, f'mtproto_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
+                        open(file_name, 'w').write(bridges)
+
+                        # Send the file of proxies
+                        send_mail('ArgoVPN Bridges',
+                            receivers=[msg.from_],
+                            text = f'Dear {msg.from_.split("<")[0]} Here is the Bridges:',
+                            attachments=[file_name]
+                        )
+
+                        counter += 1
+                        remove(file_name) # Remove the file
+
+
+                    print('Sent Argo Bridges ~>', msg.from_)
 
 
                 elif sub[0] in ['v2ray', 'vmess', 'vless', 'trojan']: # Define V2ray server command
