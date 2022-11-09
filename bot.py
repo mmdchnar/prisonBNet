@@ -91,6 +91,7 @@ if __name__ == '__main__':
 
                     html = open(join_path(MEDIA_DIR, 'templates', 'help.html'), 'r').read()
 
+                    # Send the tutorial
                     send_mail(
                         'Prison Break Tutorial', 
                         receivers=[msg.from_], 
@@ -113,7 +114,7 @@ if __name__ == '__main__':
                             text += ('\n\n'+'-'*60+'\n\n').join(wr) + '\n\n'+'-'*60+'\n\n'
 
                     if len(sub) == 2 and sub[1] == 'text':
-                        # send_mail the text of messages
+                        # Send the text of messages
                         send_mail(
                             f'{sub[1]} messages from @{sub[2]}',
                             receivers=[msg.from_],
@@ -124,7 +125,7 @@ if __name__ == '__main__':
                         file_name = join_path(BASE_DIR, f'{sub[2]}_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
                         open(file_name, 'w').write(text)
 
-                        # send_mail the file of messages
+                        # Send the file of messages
                         send_mail(
                             f'{sub[1]} messages from @{sub[2]}',
                             receivers=[msg.from_],
@@ -153,7 +154,7 @@ if __name__ == '__main__':
                                 proxies += ('\n\n'+'-'*60+'\n\n').join(result) + '\n\n'+'-'*60+'\n\n'
 
                     if len(sub) == 2 and sub[1] == 'text':
-                        # send_mail the text of proxies
+                        # Send the text of proxies
                         send_mail('MTProto Porxies',
                             receivers=[msg.from_],
                             text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the Proxies:\n\n' + proxies
@@ -163,7 +164,7 @@ if __name__ == '__main__':
                         file_name = join_path(BASE_DIR, f'mtproto_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
                         open(file_name, 'w').write(proxies)
 
-                        # send_mail the file of proxies
+                        # Send the file of proxies
                         send_mail('MTProto Porxies',
                             receivers=[msg.from_],
                             text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the Proxies: ',
@@ -188,7 +189,7 @@ if __name__ == '__main__':
                     )
 
                     if len(sub) == 2 and sub[1] == 'text':
-                        # send_mail the text of servers
+                        # Send the text of servers
                         send_mail('Open-SSTP servers',
                             receivers=[msg.from_],
                             text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the SSTP servers:\n\n' + '\n'.join(servers)
@@ -198,7 +199,7 @@ if __name__ == '__main__':
                         file_name = join_path(BASE_DIR, f'sstp_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
                         open(file_name, 'w').write('\n'.join(servers))
 
-                        # send_mail the file of servers
+                        # Send the file of servers
                         send_mail('Open-SSTP servers',
                             receivers=[msg.from_],
                             text = 'Dear ' + msg.from_.split('<')[0] + 'Here is the SSTP servers: ',
@@ -226,7 +227,7 @@ if __name__ == '__main__':
                             text += ('\n\n'+'-'*60+'\n\n').join(servers) + '\n\n'+'-'*60+'\n\n'
                     
                     if len(sub) == 2 and sub[1] == 'text':
-                        # send_mail the text of servers
+                        # Send the text of servers
                         send_mail(
                             'V2ray servers',
                             receivers=[msg.from_],
@@ -238,7 +239,7 @@ if __name__ == '__main__':
                         file_name = join_path(BASE_DIR, f'v2ray_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
                         open(file_name, 'w').write(text)
 
-                        # send_mail the file of servers
+                        # Send the file of servers
                         send_mail(
                             'V2ray servers',
                             receivers=[msg.from_],
@@ -270,7 +271,7 @@ if __name__ == '__main__':
                                     )
                     make_archive(config_name, 'zip', join_path(BASE_DIR, config_name))
 
-                    # send_mail the file of configs
+                    # Send the file of configs
                     send_mail(
                         'HTTP Config',
                         receivers=[msg.from_],
@@ -284,7 +285,7 @@ if __name__ == '__main__':
                     print('Sent Configs ~>', msg.from_)
 
 
-                elif sub[0] == 'apk': # Define APK link command
+                elif sub[0] == 'vpn': # Define VPN links command
                     html = 'Dear <b>{msg.from_.split("<")[0]}</b>\nHere is the APK links:'
 
                     for app in DRIVE:
@@ -292,14 +293,14 @@ if __name__ == '__main__':
                             <br><a href="{BAYAN[app]}"><b>Download {app} from Bayan-Box</b></a><hr>'
 
 
-                    # send_mail the APK file
+                    # Send the VPN links
                     send_mail(
-                        f'APK {sub[1]}',
+                        f'VPN links',
                         receivers=[msg.from_],
                         html=html
                     )
 
-                    print(f'Sent {sub[1]} APK ~>', msg.from_)
+                    print(f'Sent VPN links ~>', msg.from_)
 
 
         # Define the Keyboard Interrupt detector to stop the bot
