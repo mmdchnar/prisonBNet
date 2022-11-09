@@ -232,7 +232,7 @@ if __name__ == '__main__':
                         )
 
                     else:
-                        file_name = join_path(BASE_DIR, f'mtproto_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
+                        file_name = join_path(BASE_DIR, f'argo_{strftime("%H-%M_%d-%m-%y")}_{counter}.txt')
                         open(file_name, 'w').write(bridges)
 
                         # Send the file of proxies
