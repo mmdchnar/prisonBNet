@@ -7,9 +7,9 @@
 </h2>
 
 <br>
-<i style="color:coral;">
+<i style="color:gray;">
     Send commands as subject to 
-    <a href="mailto:{{ email_address }}" style="color:gray;">{{ email_address }}</a>
+    <a href="mailto:{{ email_address }}" style="color:coral;">{{ email_address }}</a>
     (capitalize is not matter)
 </i>
 <br>
@@ -20,6 +20,11 @@
 
 </head>
 <body style="font-family:Arial, Helvetica, sans-serif;">
+
+<i style="color:gray;">
+    <i style="color:coral;">Note:</i> Commands (mtproto, v2ray and sstp) can send by text using like this: "sstp text"
+</i>
+<br>
 
 {% for command in help %}
     <br>
@@ -35,125 +40,5 @@
     </ul>
 {% endfor %}
 
-<br>
-<li>
-    <a href="mailto:{{ email_address }}?subject=help">
-        <b>
-            help
-        </b>
-    </a>
-</li>
-<ul>
-    Send you the tutorial.
-</ul>
-
-<li>
-    <a href="mailto:{{ email_address }}?subject=mtproto">
-        <b>
-            mtproto
-        </b>
-    </a>
-</li>
-<ul>
-    Send you a TXT file of MTProto proxies (work with "mtproxy" too).
-    <br><a href="mailto:{{ email_address }}?subject=mtproto%20text">mtproto text</a>
-    : Send proxies without file.
-</ul>
-<li>
-    <a href="mailto:{{ email_address }}?subject=v2ray">
-        <b>
-            v2ray
-        </b>
-    </a>
-</li>
-<ul>
-    Send you a TXT file of V2ray servers (work with "vless", "vmess" and "trojan" too).
-    <br><a href="mailto:{{ email_address }}?subject=v2ray%20text">v2ray text</a>
-    : Send servers without file.
-</ul>
-<li>
-    <a href="mailto:{{ email_address }}?subject=sstp">
-        <b>
-            sstp
-        </b>
-    </a>
-</li>
-<ul>
-    Send you a TXT file of Open-SSTP servers.
-    <br><a href="mailto:{{ email_address }}?subject=sstp%20text">sstp text</a>
-    : Send servers without file.
-</ul>
-<li>
-    <a href="mailto:{{ email_address }}?subject=config">
-        <b>
-            config
-        </b>
-    </a>
-</li>
-<ul>
-    Send you a ZIP file of HTTP-injector and HTTP-Custom configs.
-</ul>
-<li>
-    <a href="mailto:{{ email_address }}?subject=apk%20injector">
-        <b>
-            apk injector
-        </b>
-    </a>
-</li>
-<ul>
-    Send you HTTP-injector and V2ray-Plugin  APKs download link.
-</ul>
-<li>
-    <a href="mailto:{{ email_address }}?subject=apk%20custom">
-        <b>
-            apk custom
-        </b>
-    </a>
-</li>
-<ul>
-    Send you HTTP-Custom APK download link.
-</ul>
-<li>
-    <a href="mailto:{{ email_address }}?subject=apk%20v2ray">
-        <b>
-            apk v2ray
-        </b>
-    </a>
-</li>
-<ul>
-    Send you V2rayNG APK download link.
-</ul>
-<li>
-    <a href="mailto:{{ email_address }}?subject=apk%20every">
-        <b>
-            apk every
-        </b>
-    </a>
-</li>
-<ul>
-    Send you EveryProxy APK download link.
-</ul>
-<li>
-    <a href="mailto:{{ email_address }}?subject=apk%20sstp">
-        <b>
-            apk sstp
-        </b>
-    </a>
-</li>
-<ul>
-    Send you Open-SSTP Client APK download link.
-</ul>
-<li>
-    <a href="mailto:{{ email_address }}?subject=apk%20ultrasurf">
-        <b>
-            apk ultrasurf
-        </b>
-    </a>
-</li>
-<ul>
-    Send you UltraSurf APK download link.
-</ul>
-</p>
 </body>
 </html>
-

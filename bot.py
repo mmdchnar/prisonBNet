@@ -77,11 +77,10 @@ def get_msgs():
 
 # Start the bot
 if __name__ == '__main__':
-    print('Ready to response...')
-
     bot = TelegramClient(StringSession(SESSION), API_ID, API_HASH).start() # Connect to Telegram
     bot_sync = bot.loop.run_until_complete # Bypass asynco client
-
+    
+    print('Ready to response...')
     while True: # Define a inifity loop to response email's
         try: # Define a try-except option for error's
             msgs = get_msgs() # Get unread messages
@@ -286,24 +285,21 @@ if __name__ == '__main__':
 
 
                 elif sub[0] == 'apk': # Define APK link command
+                    html = 'Dear <b>{msg.from_.split("<")[0]}</b>\nHere is the APK links:'
 
-                    if sub[1] in DRIVE and sub[1] != 'plugin':
-                        html = f'Dear <b>{msg.from_.split("<")[0]}</b>\nHere is the APK links:\
-                            <br><a href="{DRIVE[sub[1]]}"><b>Download from Google Drive</b></a>\
-                                <br><a href="{BAYAN[sub[1]]}"><b>Download from Bayan Box</b></a>'
+                    for app in DRIVE:
+                        html += f'<br><a href="{DRIVE[app]}"><b>Download {app} from Google-Drive</b></a>\
+                            <br><a href="{BAYAN[app]}"><b>Download {app} from Bayan-Box</b></a><hr>'
 
-                        if sub[1] == 'injector':
-                            html += f'<br><a href="{DRIVE["plugin"]}"><b>V2ray-Plugin Download from Google Drive</b></a>\
-                                <br><a href="{BAYAN["plugin"]}"><b>V2ray-Plugin Download from Bayan Box</b></a>'
 
-                        # send_mail the APK file
-                        send_mail(
-                            f'APK {sub[1]}',
-                            receivers=[msg.from_],
-                            html=html
-                        )
+                    # send_mail the APK file
+                    send_mail(
+                        f'APK {sub[1]}',
+                        receivers=[msg.from_],
+                        html=html
+                    )
 
-                        print(f'Sent {sub[1]} APK ~>', msg.from_)
+                    print(f'Sent {sub[1]} APK ~>', msg.from_)
 
 
         # Define the Keyboard Interrupt detector to stop the bot
