@@ -126,7 +126,7 @@ if __name__ == '__main__':
                                 r'((https://t\.me/|tg://)proxy\?server=.+&port=[0-9]{0,5}&secret=[a-z0-9A-Z_]+)(\s|\n)?',
                                 message.message)
 
-                            result = [proxy[0] for proxy in result]
+                            result = [proxy[0].replace('https://t.me/', 'tg://') for proxy in result]
                             if result:
                                 proxies += ('\n\n'+'-'*60+'\n\n').join(result) + '\n\n'+'-'*60+'\n\n'
 
