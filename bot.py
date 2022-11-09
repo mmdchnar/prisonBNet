@@ -46,9 +46,8 @@ for link in links.fetchall():
 # Import command help
 helps = cur.execute('SELECT * FROM help')
 
-HELP = {}
-for help in helps.fetchall():
-    HELP[help[0]] = help[1]
+HELP = helps.fetchall()
+
 
 # Connect to Gmail
 mailbox = EmailBox(
