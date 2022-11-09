@@ -218,7 +218,7 @@ if __name__ == '__main__':
                     for channel in channels:
                         for message in bot.iter_messages(channel, limit=30):
                             result = findall(
-                                r'-----BEGIN ARGO VPN BRIDGE BLOCK-----.*?-----END ARGO VPN BRIDGE BLOCK-----',
+                                r'-----BEGIN ARGO VPN BRIDGE BLOCK-----[\S\s]*?-----END ARGO VPN BRIDGE BLOCK-----',
                                 message.message)
 
                             if result:
