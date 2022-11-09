@@ -216,7 +216,7 @@ if __name__ == '__main__':
                     # Write bridges to file
                     bridges = ''
                     for channel in channels:
-                        for message in bot.iter_messages(channel, limit=50):
+                        for message in bot.iter_messages(channel, limit=30):
                             result = findall(
                                 r'-----BEGIN ARGO VPN BRIDGE BLOCK-----.*?-----END ARGO VPN BRIDGE BLOCK-----',
                                 message.message)
