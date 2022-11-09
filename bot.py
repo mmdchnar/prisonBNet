@@ -1,4 +1,5 @@
 from re import findall
+from sqlite3 import connect
 from time import sleep, strftime
 from requests import get
 from textwrap import wrap
@@ -6,7 +7,6 @@ from dotenv import load_dotenv
 from os import remove, mkdir, getenv
 from os.path import join as join_path, dirname, abspath
 from shutil import make_archive, rmtree
-
 
 from redbox import EmailBox
 from redmail import EmailSender
@@ -29,6 +29,26 @@ OWNER = getenv('OWNER') # Owner email
 BASE_DIR = dirname(abspath(__file__))
 MEDIA_DIR = join_path(BASE_DIR, "media")
 
+
+# Conecct to database
+con = connect('db.sqlite3')
+cur = con.cursor()
+
+# Import Links
+links = cur.execute('SELECT * FROM links')
+                    
+DRIVE = {}
+BAYAN = {}
+for link in links.fetchall():
+    DRIVE[link[0]] = link[1]
+    BAYAN[link[0]] = link[2]
+
+# Import command help
+helps = cur.execute('SELECT * FROM help')
+
+HELP = {}
+for help in helps.fetchall():
+    HELP[help[0]] = help[1]
 
 # Connect to Gmail
 mailbox = EmailBox(
@@ -70,15 +90,18 @@ if __name__ == '__main__':
             for msg in msgs:
                 sub = msg.subject.lower().split(' ') # Split subject to easy find command's
                 if sub[0] == 'help': # Define the help command
-                    with open(join_path(MEDIA_DIR, 'templates', 'help.html'), 'r') as html_file:
-                        send_mail(
-                            'Prison Break Tutorial', 
-                            receivers=[msg.from_], 
-                            html=html_file.read(), 
-                            body_params={
-                                'email_address': EMAIL,
-                            }
-                        )
+
+                    html = open(join_path(MEDIA_DIR, 'templates', 'help.html'), 'r').read()
+
+                    send_mail(
+                        'Prison Break Tutorial', 
+                        receivers=[msg.from_], 
+                        html=html, 
+                        body_params={
+                            'email_address': EMAIL,
+                        }
+                    )
+
                     print('Help ~> ', msg.from_)
 
 
@@ -263,34 +286,15 @@ if __name__ == '__main__':
 
 
                 elif sub[0] == 'apk': # Define APK link command
-                    drive = {
-                        'injector': 'https://drive.google.com/file/d/1Wc5ocL4feKtN1oIIenU6SGxlFdImDddS',
-                        'plugin': 'https://drive.google.com/file/d/1D4aJ8xSQfl45bvXEM5S3L5LEaOfX3Hlp',
-                        'custom': 'https://drive.google.com/file/d/1ir2qfJija1NxFBzubLikPd5BHBqg9GXS',
-                        'v2ray': 'https://drive.google.com/file/d/1Gj_jeOaAqwLDqtoQU_9DiXLY1gvucT06',
-                        'every': 'https://drive.google.com/file/d/1JVzCw0hNHb259T14xPA7xOuOXlQT7bCQ',
-                        'sstp': 'https://drive.google.com/file/d/11Pd9VYYQjdKnS3nYXZaUqcvV7y6Z1xuF',
-                        'ultrasurf': 'https://drive.google.com/file/d/1UY_aF7N8hTNVxiv3Af5sIMmP6wilf6qe'
-                    }
 
-                    bayan = {
-                        'injector': 'https://bayanbox.ir/download/2423418780594137086/HTTP-Injector-5.7.1.apk',
-                        'plugin': 'https://bayanbox.ir/download/4779056004617586889/V2Ray-plugin-v1.5.1.apk',
-                        'custom': 'https://bayanbox.ir/download/6627542560266652761/HTTP-Custom-v3.10.28.apk',
-                        'v2ray': 'https://bayanbox.ir/download/2026735872615532411/v2rayNG-v1.7.20.apk',
-                        'every': 'https://bayanbox.ir/download/5857325977849443639/Every-Proxy-9.2.apk',
-                        'sstp': 'https://bayanbox.ir/download/4488497287460583704/Open-SSTP-v1.5.7.1.apk',
-                        'ultrasurf': 'https://bayanbox.ir/download/9064590006485030472/Ultrasurf-v2.3.0.apk'
-                    }
-
-                    if sub[1] in drive and sub[1] != 'plugin':
-                        html = f'<p>Dear <b>{msg.from_.split("<")[0]}</b>\nHere is the APK links:</p><p></p>\
-                            <p><b><a href="{drive[sub[1]]}">Download from Google Drive</a></b></p>\
-                                <p><b><a href="{bayan[sub[1]]}">Download from Bayan Box</a></b></p>'
+                    if sub[1] in DRIVE and sub[1] != 'plugin':
+                        html = f'Dear <b>{msg.from_.split("<")[0]}</b>\nHere is the APK links:\
+                            <br><a href="{DRIVE[sub[1]]}"><b>Download from Google Drive</b></a>\
+                                <br><a href="{BAYAN[sub[1]]}"><b>Download from Bayan Box</b></a>'
 
                         if sub[1] == 'injector':
-                            html += f'<br><p><b><a href="{drive["plugin"]}">V2ray-Plugin Download from Google Drive</a></b></p>\
-                                <p><b><a href="{bayan["plugin"]}">V2ray-Plugin Download from Bayan Box</a></b></p></br>'
+                            html += f'<br><a href="{DRIVE["plugin"]}"><b>V2ray-Plugin Download from Google Drive</b></a>\
+                                <br><a href="{BAYAN["plugin"]}"><b>V2ray-Plugin Download from Bayan Box</b></a>'
 
                         # send_mail the APK file
                         send_mail(
