@@ -87,7 +87,8 @@ if __name__ == '__main__':
                     text = ''
                     for message in bot.iter_messages(sub[2], limit=int(sub[1])):
                         wr = '\n'.join(wrap(message.message, 50))
-                        text += ('\n\n' + '-'*60 + '\n\n').join(wr)
+                        if wr:
+                            text += ('\n\n'+'-'*60+'\n\n').join(wr) + '\n\n'+'-'*60+'\n\n'
 
                     if len(sub) == 2 and sub[1] == 'text':
                         # send_mail the text of messages
@@ -126,7 +127,8 @@ if __name__ == '__main__':
                                 message.message)
 
                             result = [proxy[0] for proxy in result]
-                            proxies += ('\n\n'+'-'*60+'\n\n').join(result) + '\n\n'+'-'*60+'\n\n'
+                            if result:
+                                proxies += ('\n\n'+'-'*60+'\n\n').join(result) + '\n\n'+'-'*60+'\n\n'
 
                     if len(sub) == 2 and sub[1] == 'text':
                         # send_mail the text of proxies
